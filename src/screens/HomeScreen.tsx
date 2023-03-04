@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
   },
   emptyWrapper: {
     alignItems: 'center',
-    opacity: 0.5,
   },
   emptyIcon: {
     backgroundColor: Colors.ebonyClay,
