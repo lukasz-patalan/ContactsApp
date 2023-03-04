@@ -19,9 +19,9 @@ app.delete('/users/:id', (req, res) => {
   const index = data.findIndex((user) => user.id === id);
   if (index !== -1) {
     data.splice(index, 1);
-    res.send(`User with ID ${id} deleted`);
+    res.send({ message: `User with ID ${id} deleted` });
   } else {
-    res.status(404).send(`User with ID ${id} not found`);
+    res.status(404).send({ message: `User not found` });
   }
 });
 
@@ -95,9 +95,7 @@ app.put('/users/:id', (req, res) => {
     } else {
       const userIndex = data.findIndex((user) => user.id === id);
       if (userIndex === -1) {
-        return res
-          .status(404)
-          .send({ message: `User with ID ${id} not found` });
+        return res.status(404).send({ message: `User not found` });
       } else {
         data[userIndex] = { ...data[userIndex], ...userData };
         res.status(200).send({ message: 'User updated successfully' });

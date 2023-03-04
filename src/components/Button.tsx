@@ -1,6 +1,7 @@
 import { Text, Pressable, ViewStyle, StyleSheet } from 'react-native';
 import React, { FC } from 'react';
 import { Colors } from '../theme/colors';
+import { AntDesign } from '@expo/vector-icons';
 
 interface ButtonProps {
   text: string;
@@ -8,6 +9,7 @@ interface ButtonProps {
   style: ViewStyle;
   disabled?: boolean;
   bg?: string;
+  iconName?: string;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -16,6 +18,7 @@ export const Button: FC<ButtonProps> = ({
   style,
   disabled,
   bg,
+  iconName,
 }) => {
   return (
     <Pressable
@@ -27,6 +30,14 @@ export const Button: FC<ButtonProps> = ({
         ...{ backgroundColor: bg || Colors.eucalyptus },
       }}
     >
+      {iconName ? (
+        <AntDesign
+          name={iconName as any}
+          size={20}
+          color={Colors.white}
+          style={styles.iconStyles}
+        />
+      ) : null}
       <Text style={styles.textWrapper}>{text}</Text>
     </Pressable>
   );
@@ -40,10 +51,14 @@ const styles = StyleSheet.create({
     width: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   textWrapper: {
     fontSize: 16,
     color: Colors.white,
     fontWeight: 'bold',
+  },
+  iconStyles: {
+    marginRight: 5,
   },
 });

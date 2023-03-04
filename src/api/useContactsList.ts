@@ -2,7 +2,7 @@ import { apiClientFetch } from './apiClient';
 import { useQuery } from 'react-query';
 
 export interface Contact {
-  id: number;
+  id: string;
   name: string;
   lastName: string;
   email: string;

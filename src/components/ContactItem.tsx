@@ -19,9 +19,7 @@ export const ContactItem: FC<ContactItemProps> = ({ item }) => {
   const queryClient = useQueryClient();
 
   const { mutate: deleteContact } = useDeleteContact(item.id, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('contactsList');
-    },
+    onSuccess: () => queryClient.invalidateQueries('contactsList'),
   });
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamList>>();

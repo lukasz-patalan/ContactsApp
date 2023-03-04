@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  Keyboard,
-  SafeAreaView,
-  Text,
-} from 'react-native';
+import { View, StyleSheet, Pressable, Keyboard, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Colors } from '../theme/colors';
 import { Input } from '../components/Input';
@@ -13,15 +6,17 @@ import { Button } from '../components/Button';
 import { Contact } from '../api/useContactsList';
 import { useAddContact } from '../api/useAddContact';
 import { useQueryClient } from 'react-query';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEditContact } from '../api/useEditContact';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppStackParamList } from '../navigation/AppNavigator';
 
 const fields = ['name', 'lastName', 'email', 'phoneNumber'];
 
 export const UserFormScreen = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigation();
-  const route = useRoute<any>();
+  const route = useRoute<RouteProp<AppStackParamList>>();
   const userToEdit = route.params?.user;
 
   const [newUser, setNewUser] = useState<Omit<Contact, 'id'>>({
@@ -58,10 +53,14 @@ export const UserFormScreen = () => {
       setError(error.response?.data?.message);
     },
   });
-  const { mutate: editUser } = useEditContact(userToEdit?.id, newUser, {
-    onSuccess: () => handleSuccess(),
-    onError: (error) => setError(error.response?.data?.message),
-  });
+  const { mutate: editUser } = useEditContact(
+    userToEdit?.id as string,
+    newUser,
+    {
+      onSuccess: () => handleSuccess(),
+      onError: (error) => setError(error.response?.data?.message),
+    }
+  );
 
   const userToEditDisabled =
     userToEdit?.name === newUser.name &&
@@ -111,9 +110,10 @@ export const UserFormScreen = () => {
         <View style={styles.separator} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <Button
+          iconName='save'
           bg={userToEdit && Colors.selectiveYellow}
           style={styles.buttonStyles}
-          text={userToEdit ? 'Edit' : 'Add'}
+          text='Save'
           onPress={userToEdit ? editUser : addUser}
           disabled={isDisabled}
         />
@@ -147,5 +147,6 @@ const styles = StyleSheet.create({
   },
   buttonStyles: {
     alignSelf: 'center',
+    marginBottom: 10,
   },
 });

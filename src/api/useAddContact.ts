@@ -3,7 +3,7 @@ import { useMutation, UseMutationOptions } from 'react-query';
 import { apiClientPost } from './apiClient';
 import { Contact } from './useContactsList';
 interface AddContactResponse {
-  data: any;
+  data: Contact;
 }
 
 export const useAddContact = (

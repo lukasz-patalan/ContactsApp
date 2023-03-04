@@ -14,7 +14,7 @@ export type AppStackParamList = {
   HomeScreen: undefined;
   UserFormScreen:
     | {
-        user: Omit<Contact, 'id'>;
+        user: Contact;
       }
     | undefined;
 };

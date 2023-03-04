@@ -2,11 +2,11 @@ import { AxiosError } from 'axios';
 import { useMutation, UseMutationOptions } from 'react-query';
 import { apiClientDelete } from './apiClient';
 interface DeleteContactsReposne {
-  data: any;
+  data: { message: string };
 }
 
 export const useDeleteContact = (
-  contactId: number,
+  contactId: string,
   options?: UseMutationOptions<DeleteContactsReposne, AxiosError, void, unknown>
 ) => {
   return useMutation<DeleteContactsReposne, AxiosError, void, unknown>(
