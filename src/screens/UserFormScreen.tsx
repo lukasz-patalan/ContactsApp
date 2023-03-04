@@ -10,6 +10,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEditContact } from '../api/useEditContact';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppStackParamList } from '../navigation/AppNavigator';
+import { showToast } from '../helpers/showToast';
 
 const fields = ['name', 'lastName', 'email', 'phoneNumber'];
 
@@ -38,17 +39,18 @@ export const UserFormScreen = () => {
     }
   }, []);
 
-  const handleSuccess = () => {
+  const handleSuccess = (text: string) => {
     setError('');
     queryClient.invalidateQueries('contactsList');
     navigate.goBack();
+    showToast(text);
   };
 
   const onChangeText = (key: string, text: string) =>
     setNewUser((prev) => ({ ...prev, [key]: text }));
 
   const { mutate: addUser } = useAddContact(newUser, {
-    onSuccess: () => handleSuccess(),
+    onSuccess: () => handleSuccess('new contact added'),
     onError: (error) => {
       setError(error.response?.data?.message);
     },
@@ -57,7 +59,7 @@ export const UserFormScreen = () => {
     userToEdit?.id as string,
     newUser,
     {
-      onSuccess: () => handleSuccess(),
+      onSuccess: () => handleSuccess('changes saved'),
       onError: (error) => setError(error.response?.data?.message),
     }
   );

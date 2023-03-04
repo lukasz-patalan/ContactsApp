@@ -11,6 +11,7 @@ import { AppStackRoutes } from '../navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamList } from '../navigation/AppNavigator';
+import { showToast } from '../helpers/showToast';
 
 export interface ContactItemProps {
   item: Contact;
@@ -19,7 +20,11 @@ export const ContactItem: FC<ContactItemProps> = ({ item }) => {
   const queryClient = useQueryClient();
 
   const { mutate: deleteContact } = useDeleteContact(item.id, {
-    onSuccess: () => queryClient.invalidateQueries('contactsList'),
+    onSuccess: () => {
+      showToast(`Contact: ${item.name} ${item.lastName} deleted`);
+
+      queryClient.invalidateQueries('contactsList');
+    },
   });
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamList>>();

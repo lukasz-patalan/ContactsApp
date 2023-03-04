@@ -19,9 +19,25 @@ import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Filters } from '../components/Filters';
 import { getSortedArray } from '../helpers/sortArray';
+import { showToast } from '../helpers/showToast';
 
 export const HomeScreen = () => {
   const [isSorted, setIsSorted] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+
+  const { data: contactsList, isLoading, refetch, error } = useContactsList();
+
+  useEffect(() => {
+    if (contactsList && contactsList.length < 2) {
+      setIsSorted(false);
+    }
+    if (error) {
+      showToast('error fetching data', Colors.burntSienna);
+    }
+  }, [contactsList, error]);
 
   const renderItem = ({ item }: ContactItemProps) => {
     return <ContactItem {...{ item }} />;
@@ -29,27 +45,15 @@ export const HomeScreen = () => {
 
   const keyExtractor = (item: Contact) => `${item.id}`;
 
-  const { navigate } =
-    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
-
-  const { data: contactsList, isLoading, refetch } = useContactsList();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const handleGoToAddUser = () => navigate(AppStackRoutes.UserFormScreen);
-
-  const data = isSorted ? getSortedArray(contactsList) : contactsList;
-
-  useEffect(() => {
-    if (contactsList && contactsList.length < 2) {
-      setIsSorted(false);
-    }
-  }, [contactsList]);
 
   const onRefresh = () => {
     setIsRefreshing(true);
     refetch();
     setIsRefreshing(false);
   };
+
+  const data = isSorted ? getSortedArray(contactsList) : contactsList;
 
   return (
     <SafeAreaView style={styles.page}>
