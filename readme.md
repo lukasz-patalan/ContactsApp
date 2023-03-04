@@ -1,6 +1,7 @@
 # ContactsApp
 
 ### clone the repository
+`git clone git@github.com:lukasz-patalan/ContactsApp.git`
 
 ### Start the server:
 
